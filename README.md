@@ -1,10 +1,10 @@
-# ASD Prediction via Maternal Gut Microbiome
+# ASD Prediction via Gut Microbiome
 
-A machine learning pipeline that predicts Autism Spectrum Disorder (ASD) in children using their **mothers' gut microbiome** composition. The model achieves **95.8% accuracy** with an AUC of **0.9704** on held-out test data.
+Two parallel machine learning pipelines that predict Autism Spectrum Disorder (ASD) using gut microbiome composition — one using **maternal microbiome** data, one using **child microbiome** data directly. The maternal model achieves **95.8% accuracy** with an AUC of **0.9704** on held-out test data.
 
 ## Research Overview
 
-This project investigates whether maternal gut microbiota can serve as early predictive biomarkers for child ASD diagnosis — contributing to the broader gut-brain axis hypothesis in ASD etiology.
+This project investigates whether gut microbiota can serve as predictive biomarkers for child ASD diagnosis. Two approaches are compared: using the **child's own microbiome** vs. using the **mother's microbiome** to predict the child's outcome — contributing to the broader gut-brain axis hypothesis in ASD etiology.
 
 **Study design:** Case-control study using 16S rRNA gut microbiome data (V3-V4 region, Illumina MiSeq) from 246 Chinese family samples:
 
@@ -15,25 +15,28 @@ This project investigates whether maternal gut microbiota can serve as early pre
 | TD | Typically developing children | 46 |
 | TDM | Mothers of typically developing children | 46 |
 
-The model is trained on **maternal OTU abundances** and predicts their **child's diagnosis (ASD vs. TD)**.
+Two models are trained on OTU abundances and predict **child diagnosis (ASD vs. TD)**:
+- **Maternal model** — uses mother's OTU features, linked to child outcome via household ID
+- **Child model** — uses child's own OTU features directly
 
-## Model Performance
+## Model Comparison
 
-| Metric | Value |
-|--------|-------|
-| Accuracy | 95.8% |
-| Sensitivity | 100% |
-| Specificity | 88.9% |
-| Balanced Accuracy | 94.4% |
-| Precision | 93.8% |
-| AUC | 0.9704 |
-| p-value | < 0.001 |
+| Metric | Maternal Microbiome | Child Microbiome |
+|--------|--------------------|--------------------|
+| Accuracy | 95.8% | TBD |
+| Sensitivity | 100% | TBD |
+| Specificity | 88.9% | TBD |
+| Balanced Accuracy | 94.4% | TBD |
+| Precision | 93.8% | TBD |
+| AUC | 0.9704 | TBD |
+| p-value | < 0.001 | TBD |
 
 ## Repository Structure
 
 ```
 .
-├── otu_model_train.Rmd                 # Main ML pipeline (data prep, GBM model, feature importance)
+├── otu_model_train.Rmd                 # ML pipeline using maternal microbiome data
+├── child_otu_model_train.Rmd           # ML pipeline using child microbiome data
 ├── data_cleaning.py                    # Merges OTU table (.biom) with sample metadata
 ├── ml_performance.py                   # Generates publication-ready performance metrics table
 ├── confusion_matrix.py                 # Generates styled confusion matrix visualization
@@ -55,12 +58,21 @@ The model is trained on **maternal OTU abundances** and predicts their **child's
   - `otu_table_with_labels_header.csv` — numeric OTU IDs as column names
   - `otu_table_with_labels_tax.csv` — full taxonomy strings as column names
 
-### 2. Model Training (`otu_model_train.Rmd`)
-- Links mothers to children via household ID
+### 2a. Maternal Model (`otu_model_train.Rmd`)
+- Filters for mother samples (`ASDM`, `TDM`)
+- Joins child diagnosis onto maternal rows via household ID
+- Uses **mother OTU features** to predict child outcome
+
+### 2b. Child Model (`child_otu_model_train.Rmd`)
+- Filters for child samples (`ASD`, `TD`) directly
+- No join required — child diagnosis is the target
+- Uses **child OTU features** to predict their own diagnosis
+
+Both models apply identical preprocessing and training:
 - Sparsity filtering: keeps OTUs present in ≥10% of samples
 - Log-transforms OTU counts (`log1p`)
 - 80/20 stratified train-test split
-- Trains a **Gradient Boosting Machine (GBM)** with 5-fold cross-validation
+- **Gradient Boosting Machine (GBM)** with 5-fold cross-validation
 
 **GBM hyperparameters:**
 ```
@@ -103,9 +115,10 @@ pip install -r requirements.txt
 # Step 1: Process raw data (Python)
 python data_cleaning.py
 
-# Step 2: Train model and generate results (R)
-# Open otu_model_train.Rmd in RStudio and knit, or run:
-Rscript -e "rmarkdown::render('otu_model_train.Rmd')"
+# Step 2: Train models and generate results (R)
+# Open either .Rmd in RStudio and knit, or run:
+Rscript -e "rmarkdown::render('otu_model_train.Rmd')"       # Maternal model
+Rscript -e "rmarkdown::render('child_otu_model_train.Rmd')" # Child model
 
 # Step 3: Generate visualizations (Python)
 python confusion_matrix.py
@@ -114,9 +127,9 @@ python ml_performance.py
 
 ## Key Findings
 
+- The maternal model achieves 95.8% accuracy with perfect sensitivity (100%) — no ASD cases missed
 - Specific bacterial taxa in maternal gut microbiota are significantly associated with child ASD status
-- The GBM model identifies interpretable biomarkers that differentiate ASD and TD family groups
-- Perfect sensitivity (100%) means no ASD cases were missed in the test set
-- Results support the hypothesis that maternal microbiome composition has transgenerational neurodevelopmental implications
+- Running the same pipeline on child microbiome data enables a direct comparison of predictive power between maternal and child gut signatures
+- Results contribute to the gut-brain axis hypothesis and the potential for transgenerational microbiome-based ASD biomarkers
 
 <img width="4608" height="3456" alt="CUCOH Poster - Predicting ASD" src="https://github.com/user-attachments/assets/9db0413a-7ace-43e6-b1ac-78151f2130ed" />
