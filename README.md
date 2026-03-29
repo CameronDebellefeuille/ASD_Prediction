@@ -112,4 +112,4 @@ python ml_performance.py
 - Perfect sensitivity (100%) means no ASD cases were missed in the test set
 - Results support the hypothesis that maternal microbiome composition has transgenerational neurodevelopmental implications
 
-![CUCOH Poster](../CUCOH%20Poster%20-%20Predicting%20ASD.png)
+<img width="4608" height="3456" alt="CUCOH Poster - Predicting ASD" src="https://github.com/user-attachments/assets/9db0413a-7ace-43e6-b1ac-78151f2130ed" />
