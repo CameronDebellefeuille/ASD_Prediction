@@ -27,7 +27,7 @@ theme_set(theme_classic())
 ```{R}
 # --- DATA LOADING ---
 # Load the main OTU table
-df <- read.csv("C:/Users/21cd51/OneDrive - Queen's University/ASD_ML_proj/otu_table_with_labels_header.csv")
+df <- read.csv("otu_table_with_labels_header.csv")
 
 # Ensure metadata columns are factors
 df$sample_id <- as.factor(df$sample_id)

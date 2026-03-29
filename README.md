@@ -32,17 +32,18 @@ The model is trained on **maternal OTU abundances** and predicts their **child's
 ## Repository Structure
 
 ```
-ASD_Prediction/
-├── otu_model_train.Rmd       # Main ML pipeline (data prep, GBM model, feature importance)
-├── data_cleaning.py          # Merges OTU table (.biom) with sample metadata
-├── ml_performance.py         # Generates publication-ready performance metrics table
-├── confusion_matrix.py       # Generates styled confusion matrix visualization
-├── requirements.txt          # Python dependencies
-├── data_summary.txt          # Dataset summary statistics
-├── otu_table.biom            # Raw OTU abundance table (6,195 OTUs × 246 samples)
-├── otu_table_with_labels.csv # Processed OTU table with diagnostic labels
-├── 97_otu_taxonomy.txt       # OTU taxonomy annotations (Greengenes database)
-└── mapping_file/             # Sample metadata (246 samples, 46 variables)
+.
+├── otu_model_train.Rmd                 # Main ML pipeline (data prep, GBM model, feature importance)
+├── data_cleaning.py                    # Merges OTU table (.biom) with sample metadata
+├── ml_performance.py                   # Generates publication-ready performance metrics table
+├── confusion_matrix.py                 # Generates styled confusion matrix visualization
+├── requirements.txt                    # Python dependencies
+├── data_summary.txt                    # Dataset summary statistics
+├── otu_table.biom                      # Raw OTU abundance table (6,195 OTUs × 246 samples)
+├── otu_table_with_labels_header.csv    # Processed OTU table with numeric OTU IDs as column names
+├── otu_table_with_labels_tax.csv       # Processed OTU table with full taxonomy strings as column names
+├── 97_otu_taxonomy.txt                 # OTU taxonomy annotations (Greengenes database)
+└── mapping_file/                       # Sample metadata (246 samples, 46 variables)
 ```
 
 ## Pipeline
@@ -50,7 +51,9 @@ ASD_Prediction/
 ### 1. Data Preparation (`data_cleaning.py`)
 - Loads the `.biom` OTU table and sample metadata
 - Merges OTU abundances with diagnostic labels
-- Outputs `otu_table_with_labels.csv`
+- Outputs two processed CSVs:
+  - `otu_table_with_labels_header.csv` — numeric OTU IDs as column names
+  - `otu_table_with_labels_tax.csv` — full taxonomy strings as column names
 
 ### 2. Model Training (`otu_model_train.Rmd`)
 - Links mothers to children via household ID
@@ -82,9 +85,13 @@ n.trees = 500 | interaction.depth = 4 | shrinkage = 0.01 | cv.folds = 5
 
 ### Python Setup
 ```bash
+# Clone the repository
+git clone https://github.com/your-username/ASD_Prediction.git
+cd ASD_Prediction
+
 # Create and activate a virtual environment
 python -m venv .venv
-.venv\Scripts\activate        # Windows
+.venv/Scripts/activate        # Windows
 source .venv/bin/activate     # Mac/Linux
 
 # Install dependencies
