@@ -89,6 +89,11 @@ preds <- ifelse(probs > 0.5, "ASD", "TD")
 
 # Confusion Matrix
 confusionMatrix(as.factor(preds), test_data$child_outcome)
+
+# AUC
+roc_obj <- roc(as.numeric(test_data$child_outcome == "ASD"), probs)
+cat("AUC:", auc(roc_obj), "\n")
+plot(roc_obj, main = "ROC Curve - Child Microbiome Model", col = "#143a6d", lwd = 2)
 ```
 
 ```{r}
