@@ -23,13 +23,13 @@ Two models are trained on OTU abundances and predict **child diagnosis (ASD vs. 
 
 | Metric | Maternal Microbiome | Child Microbiome |
 |--------|--------------------|--------------------|
-| Accuracy | 95.8% | TBD |
-| Sensitivity | 100% | TBD |
-| Specificity | 88.9% | TBD |
-| Balanced Accuracy | 94.4% | TBD |
-| Precision | 93.8% | TBD |
-| AUC | 0.9704 | TBD |
-| p-value | < 0.001 | TBD |
+| Accuracy | 95.8% | 83.3% |
+| Sensitivity | 100% | 86.7% |
+| Specificity | 88.9% | 77.8% |
+| Balanced Accuracy | 94.4% | 86.7 |
+| Precision | 93.8% | 77.8% |
+| AUC | 0.9704 | 0.9333 |
+| p-value | < 0.001 | 0.02 |
 
 ## Repository Structure
 
